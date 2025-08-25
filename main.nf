@@ -9,7 +9,7 @@ process merge_FASTQ_R1
     tuple(val(parent),val(embryo),val(biopsy),path(FASTQs))
 
     output:
-    path("*.merged.fq.gz")
+    path("*.merged.R1.fastq.gz")
 
     script:
     """
@@ -28,7 +28,7 @@ process merge_FASTQ_R2
     tuple(val(parent),val(embryo),val(biopsy),path(FASTQs))
 
     output:
-    path("*.merged.fq.gz")
+    path("*.merged.R2.fastq.gz")
 
     script:
     """
