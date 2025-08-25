@@ -28,8 +28,8 @@ workflow
     FASTQ_1.view()
     FASTQ_2.view()
 
-    Grouped_FASTQ_1 = FASTQ_1.groupTuple(by=[0,1,2]) 
-    Grouped_FASTQ_2 = FASTQ_2.groupTuple(by=[0,1,2])
+    Grouped_FASTQ_1 = FASTQ_1.groupTuple(by:[0,1,2]) 
+    Grouped_FASTQ_2 = FASTQ_2.groupTuple(by:[0,1,2])
     Grouped_FASTQ_1.view()
     Grouped_FASTQ_2.view()   
 }
