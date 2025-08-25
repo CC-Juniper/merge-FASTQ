@@ -1,4 +1,4 @@
-process merge_FASTQs
+process merge_FASTQ_R1
 {
     publishDir "${params.outdir}/", mode:'copy'
     container '882400076574.dkr.ecr.us-east-1.amazonaws.com/juniper-python:latest'
@@ -13,7 +13,26 @@ process merge_FASTQs
 
     script:
     """
-    cat ${FASTQs} > ${basename}.merged.fq.gz
+    cat ${FASTQs} > ${parent}_${embryo}_${biopsy}.merged.R1.fastq.gz
+    """
+}
+
+process merge_FASTQ_R2
+{
+    publishDir "${params.outdir}/", mode:'copy'
+    container '882400076574.dkr.ecr.us-east-1.amazonaws.com/juniper-python:latest'
+    cpus 8
+    memory '16 GB'
+
+    input:
+    tuple(val(parent),val(embryo),val(biopsy),path(FASTQs))
+
+    output:
+    path("*.merged.fq.gz")
+
+    script:
+    """
+    cat ${FASTQs} > ${parent}_${embryo}_${biopsy}.merged.R2.fastq.gz
     """
 }
 
@@ -30,8 +49,7 @@ workflow
 
     Grouped_FASTQ_1 = FASTQ_1.groupTuple(by:[0,1,2]) 
     Grouped_FASTQ_2 = FASTQ_2.groupTuple(by:[0,1,2])
-    //Grouped_FASTQ_1.view()
-    //Grouped_FASTQ_2.view()
-    MERGED_FASTQS = Grouped_FASTQ_1.concat(Grouped_FASTQ_2)
-    MERGED_FASTQS.view()
+    merge_FASTQ_R1(Grouped_FASTQ_1)
+    merge_FASTQ_R2(Grouped_FASTQ_2)
+
 }
