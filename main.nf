@@ -6,7 +6,7 @@ process merge_FASTQs
     memory '16 GB'
 
     input:
-    tuple(val(basename),path(FASTQs))
+    tuple(val(parent),val(embryo),val(biopsy),path(FASTQs))
 
     output:
     path("*.merged.fq.gz")
@@ -25,11 +25,13 @@ workflow
     FASTQ_2 = Channel.fromPath(params.input_csv).splitCsv(header: true,sep: ",").map{
         row -> tuple(row.parent,row.embryo,row.biopsy,file(row.fastq_2))
     }
-    FASTQ_1.view()
-    FASTQ_2.view()
+    //FASTQ_1.view()
+    //FASTQ_2.view()
 
     Grouped_FASTQ_1 = FASTQ_1.groupTuple(by:[0,1,2]) 
     Grouped_FASTQ_2 = FASTQ_2.groupTuple(by:[0,1,2])
-    Grouped_FASTQ_1.view()
-    Grouped_FASTQ_2.view()   
+    //Grouped_FASTQ_1.view()
+    //Grouped_FASTQ_2.view()
+    MERGED_FASTQS = Grouped_FASTQ_1.concat(Grouped_FASTQ_2)
+    MERGED_FASTQS.view()
 }
